@@ -68,7 +68,7 @@ export function ThoughtProcessBox({
               }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
-              <CardContent>
+              <CardContent className="hide-scrollbar">
                 {/* .hide-scrollbar hides the scrollbar; max-h-64 sets the height limit. */}
                 <ul
                   ref={thoughtsRef}
