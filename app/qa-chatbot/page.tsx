@@ -17,6 +17,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ThoughtProcessBox } from "@/components/thought-process-box";
 import { Label } from "@/components/ui/label";
 import { Upload, X, Send, Bot, User } from "lucide-react";
+import { Typewriter } from 'react-simple-typewriter';
 
 /**
  * Helper: read file as text on client
@@ -282,27 +283,38 @@ export default function QAChatbot() {
                   {messages.map((msg, index) => (
                     <motion.div
                       key={index}
-                      className={`mb-4 ${
-                        msg.type === "user" ? "text-right" : "text-left"
-                      }`}
+                      className={`mb-4 ${msg.type === 'user' ? 'text-right' : 'text-left'}`}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                       transition={{ duration: 0.3 }}
                     >
                       <div
-                        className={`inline-block p-3 rounded-lg ${
-                          msg.type === "user"
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-muted text-muted-foreground"
-                        }`}
+                        className={`inline-block p-3 rounded-lg ${msg.type === 'user'
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-muted text-muted-foreground'
+                          }`}
                       >
-                        {msg.type === "user" ? (
-                          <User className="inline-block w-4 h-4 mr-2" />
+                        {msg.type === 'user' ? (
+                          <>
+                            <User className="inline-block w-4 h-4 mr-2" />
+                            <Typewriter
+                              words={[msg.content]}
+                              typeSpeed={25}
+                              cursor = {false}
+                            />
+                          </>
                         ) : (
-                          <Bot className="inline-block w-4 h-4 mr-2" />
+                          <>
+                            <Bot className="inline-block w-4 h-4 mr-2" />
+                            <Typewriter
+                              words={[msg.content]}
+                              typeSpeed={5}
+                              cursor
+                              cursorStyle=""
+                            />
+                          </>
                         )}
-                        {msg.content}
                       </div>
                     </motion.div>
                   ))}

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Minimize2, Maximize2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { Typewriter } from 'react-simple-typewriter';
 
 interface ThoughtProcessBoxProps {
   /** An array of strings to display as the AI's reasoning or chain-of-thought. */
@@ -83,7 +84,12 @@ export function ThoughtProcessBox({
                       className="text-xs text-muted-foreground border-b pb-1 mb-1"
                     >
                       {/* {msg} */}
-                      <ReactMarkdown>{msg}</ReactMarkdown>
+                      {/* <ReactMarkdown>{msg}</ReactMarkdown> */}
+                      <Typewriter
+                        words={[msg]}
+                        typeSpeed={5}
+                        cursor = {false}
+                      />
                     </motion.li>
                   ))}
                 </ul>

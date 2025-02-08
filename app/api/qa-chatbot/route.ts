@@ -90,7 +90,7 @@ ${knowledgeBase}
     }
 
     const data = await response.json();
-    console.log("[QA-CHATBOT] OpenRouter response data:", data);
+    console.log("[QA-CHATBOT] OpenRouter response data:", data.choices[0]);
 
     const rawText = data?.choices?.[0]?.message?.content || "";
     let answer = rawText.trim();
