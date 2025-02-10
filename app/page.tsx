@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Brain, MessageSquare, FileText, Calculator, ShoppingCart } from "lucide-react"
+import { Brain, MessageSquare, FileText, Calculator, ShoppingCart , ChefHat } from "lucide-react"
 import { motion } from "framer-motion"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -11,7 +11,7 @@ const projects = [
     title: "Q&A Chatbot",
     icon: MessageSquare,
     href: "/qa-chatbot",
-    color: "text-blue-500 dark:text-blue-400",
+    color: "text-orange-500 dark:text-orange-400",
     description: "Get instant answers to your questions with our AI-powered chatbot.",
   },
   {
@@ -41,6 +41,13 @@ const projects = [
     href: "/affiliate-reviews",
     color: "text-red-500 dark:text-red-400",
     description: "Find the best affiliate products with our AI-powered review generator.",
+  },
+  {
+    title: "Recipe Generator",
+    icon: ChefHat,
+    href: "/recipe-generator",
+    color: "text-blue-500 dark:text-blue-400",
+    description: "Create personalized recipes based on your ingredients and preferences.",
   },
 ]
 
