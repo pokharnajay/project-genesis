@@ -68,7 +68,7 @@ ${knowledgeBase}
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY ?? ""}`,
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENROUTER_API_KEY ?? ""}`,
       },
       body: JSON.stringify({
         // If you want deepseek, use "deepseek/deepseek-r1:free" instead

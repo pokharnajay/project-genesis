@@ -30,6 +30,8 @@ export interface GenerateRecipesParams {
       cuisine = "",
       notes = "",
     } = params;
+
+    console.log('Function called')
   
     // 1) Construct system message
     const systemMessage = `
@@ -107,7 +109,7 @@ export interface GenerateRecipesParams {
       headers: {
         "Content-Type": "application/json",
         // WARNING: Exposing your API key on the client side is not recommended.
-        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY ?? ""}`,
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENROUTER_API_KEY ?? ""}`,
       },
       body: JSON.stringify({
         model: "openai/gpt-4o-mini",

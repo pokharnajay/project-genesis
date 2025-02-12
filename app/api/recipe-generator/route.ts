@@ -11,7 +11,7 @@ import { NextRequest, NextResponse } from "next/server";
  * - notes
  * - ingredients
  *
- * Make sure you have OPENROUTER_API_KEY in .env for a successful call.
+ * Make sure you have NEXT_PUBLIC_OPENROUTER_API_KEY in .env for a successful call.
  */
 
 export async function POST(req: NextRequest) {
@@ -118,7 +118,7 @@ And follow constraints above.
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY ?? ""}`,
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENROUTER_API_KEY ?? ""}`,
       },
       body: JSON.stringify({
         model: "openai/gpt-4o-mini",

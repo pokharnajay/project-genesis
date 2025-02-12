@@ -51,7 +51,7 @@ Error or extra info (if coding): "${errorInput}"
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY ?? ""}`,
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENROUTER_API_KEY ?? ""}`,
       },
       body: JSON.stringify({
         model: "openai/gpt-4o-mini",
