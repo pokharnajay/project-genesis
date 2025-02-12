@@ -77,7 +77,7 @@ Constraints:
 8) Assume that pantry staples, including masalas and other small spices, are already present at home.
 9) If the dish does not have a specific name, invent a fun and creative name.
 10) Provide a shortDescription (3-4 sentences) in both English and Hindi.
-11) Provide deep detailed extremely detailed step-by-step instructions in both English and Hindi.
+11) Provide extremely detailed step-by-step instructions in both English and Hindi.
 12) Provide at least 2-3 recipes in the "recipes" array (sometimes you can give just 1 or 2).
 13) Include 1-3 lines of "thought process" in both English and Hindi (reasoningEn and reasoningHi).
 14) Output only JSON, no triple backticks or extra text.

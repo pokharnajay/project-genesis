@@ -16,6 +16,7 @@ import { Plus, X, ChefHat, Sparkles, Utensils, Languages } from "lucide-react";
 import { ThoughtProcessBox } from "@/components/thought-process-box";
 import CuisineDropdown from "@/components/ui/CuisineDropdown";
 import MealTypeDropdown from "@/components/ui/MealTypeDropdown";
+import { generateRecipes } from "@/utils/generateRecipes"; // adjust path as needed
 
 // Recipe interface
 interface Recipe {
@@ -89,9 +90,7 @@ const RecipeCard = ({
           </p>
           <p className="text-sm text-muted-foreground mb-2">
             <strong>
-              <FadeText
-                text={localLanguage === "en" ? "Health/Taste Ratio:" : "स्वास्थ्य/स्वाद अनुपात:"}
-              />
+              <FadeText text={localLanguage === "en" ? "Health/Taste Ratio:" : "स्वास्थ्य/स्वाद अनुपात:"} />
             </strong>{" "}
             <FadeText text={recipe.healthTasteRatio} />
           </p>
@@ -147,9 +146,7 @@ const RecipeModal = ({
         </h2>
         <p className="text-muted-foreground mb-2 dark:text-black">
           <FadeText
-            text={
-              localLanguage === "en" ? recipe.shortDescriptionEn : recipe.shortDescriptionHi
-            }
+            text={localLanguage === "en" ? recipe.shortDescriptionEn : recipe.shortDescriptionHi}
           />
         </p>
         <p className="text-sm text-muted-foreground mb-2 dark:text-black">
@@ -160,11 +157,7 @@ const RecipeModal = ({
         </p>
         <p className="text-sm text-muted-foreground mb-4 dark:text-black">
           <strong>
-            <FadeText
-              text={
-                localLanguage === "en" ? "Health/Taste Ratio:" : "स्वास्थ्य/स्वाद अनुपात:"
-              }
-            />
+            <FadeText text={localLanguage === "en" ? "Health/Taste Ratio:" : "स्वास्थ्य/स्वाद अनुपात:"} />
           </strong>{" "}
           <FadeText text={recipe.healthTasteRatio} />
         </p>
@@ -200,10 +193,10 @@ const RecipeModal = ({
       </motion.div>
     </motion.div>
   );
-}
+};
 
 export default function RecipeGenerator() {
-  // Global form state (for UI controls & ThoughtProcessBox)
+  // Global form state for UI controls & ThoughtProcessBox
   const [formLanguage, setFormLanguage] = useState<"en" | "hi">("en");
 
   // Ingredients
@@ -268,11 +261,11 @@ export default function RecipeGenerator() {
     setIngredients(updated);
   };
 
-  // Generate recipes (calls the API route)
+  // Generate recipes (calls the external function)
   const handleGenerate = async () => {
     setIsGenerating(true);
     try {
-      const requestBody = {
+      const { recipes: newRecipes, reasoningEn, reasoningHi } = await generateRecipes({
         ingredients: ingredients.filter((i) => i.trim() !== ""),
         priority,
         maxCalories,
@@ -281,30 +274,14 @@ export default function RecipeGenerator() {
         cookingTime,
         cuisine,
         notes,
-      };
-
-      const res = await fetch("/api/recipe-generator", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestBody),
       });
-      const data = await res.json();
+      // Prepend new recipes
+      setRecipes((prev) => [...newRecipes, ...prev]);
 
-      if (data.error) {
-        console.error("[RECIPE-GENERATOR] Server error:", data.error);
-      } else {
-        // data.recipes is an array of recipes with both EN & HI fields
-        const newRecipes = data.recipes || [];
-        const { reasoningEn, reasoningHi } = data;
-
-        // Prepend new recipes
-        setRecipes((prev) => [...newRecipes, ...prev]);
-
-        // Update thought process messages (based on formLanguage)
-        if (reasoningEn) setReasoningMessagesEn((prev) => [...prev, reasoningEn]);
-        if (reasoningHi) setReasoningMessagesHi((prev) => [...prev, reasoningHi]);
-        setIsMinimized(false);
-      }
+      // Update thought process messages (based on formLanguage)
+      if (reasoningEn) setReasoningMessagesEn((prev) => [...prev, reasoningEn]);
+      if (reasoningHi) setReasoningMessagesHi((prev) => [...prev, reasoningHi]);
+      setIsMinimized(false);
     } catch (err) {
       console.error("[RECIPE-GENERATOR] Client error:", err);
     } finally {
@@ -313,7 +290,6 @@ export default function RecipeGenerator() {
   };
 
   const openRecipeModal = (rec: Recipe, index: number) => {
-    // When opening modal, pass the record's language default (here we simply default to "en")
     setModalLanguage("en");
     setSelectedRecipe({ ...rec, index });
   };
