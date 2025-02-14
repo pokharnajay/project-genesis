@@ -17,8 +17,11 @@ import { ThoughtProcessBox } from "@/components/thought-process-box";
 import CuisineDropdown from "@/components/ui/CuisineDropdown";
 import MealTypeDropdown from "@/components/ui/MealTypeDropdown";
 import { generateRecipes } from "@/utils/generateRecipes"; // adjust path as needed
+import DietDropdown from "@/components/ui/DietDropdown";
 
-// Recipe interface
+//
+// Recipe interfaces
+//
 interface Recipe {
   titleEn: string;
   titleHi: string;
@@ -35,7 +38,9 @@ interface ModalRecipe extends Recipe {
   index: number;
 }
 
+//
 // A memoized FadeText component for smooth easeInOut transitions
+//
 const FadeText = memo(({ text }: { text: string }) => (
   <motion.div
     initial={{ opacity: 0 }}
@@ -47,7 +52,9 @@ const FadeText = memo(({ text }: { text: string }) => (
   </motion.div>
 ));
 
+//
 // RecipeCard component with its own local language toggle
+//
 const RecipeCard = ({
   recipe,
   index,
@@ -70,7 +77,7 @@ const RecipeCard = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
-      <Card className="w-full overflow-hidden hover:shadow-xl transition-shadow duration-300">
+      <Card className="w-full overflow-hidden hover:shadow-lg transition-shadow duration-300">
         <CardHeader>
           <CardTitle className="text-xl font-semibold">
             <FadeText text={localLanguage === "en" ? recipe.titleEn : recipe.titleHi} />
@@ -104,7 +111,7 @@ const RecipeCard = ({
             <Button variant="outline" onClick={() => onOpenModal(recipe, index)}>
               <FadeText text={localLanguage === "en" ? "View Full Recipe" : "पूरी रेसिपी देखें"} />
             </Button>
-            <Button variant="outline" onClick={toggleLocalLanguage}>
+            <Button variant="ghost" onClick={toggleLocalLanguage}>
               <Languages className="h-5 w-5" />
             </Button>
           </div>
@@ -114,7 +121,10 @@ const RecipeCard = ({
   );
 };
 
-// Updated RecipeModal component (mobile-friendly) with second Close button
+//
+// RecipeModal component (mobile-friendly) with second Close button
+// and dark-mode styling for the action buttons.
+//
 const RecipeModal = ({
   recipe,
   onClose,
@@ -132,37 +142,42 @@ const RecipeModal = ({
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 dark:text-black p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 dark:text-white p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       <motion.div
-        className="bg-white w-full max-w-2xl p-6 rounded shadow-xl relative overflow-y-auto max-h-[85vh]"
+        className="bg-white dark:bg-neutral-900 w-full max-w-2xl p-6 rounded shadow-lg relative overflow-y-auto max-h-[85vh]"
         initial={{ scale: 0.8 }}
         animate={{ scale: 1 }}
         exit={{ scale: 0.8 }}
       >
-        {/* Top-right close icon */}
-        <Button variant="ghost" size="icon" className="absolute top-2 right-2" onClick={onClose}>
+        {/* Top-right close icon (with dark-mode text classes) */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-2 right-2 dark:text-white"
+          onClick={onClose}
+        >
           <X className="h-5 w-5" />
         </Button>
 
         <h2 className="text-2xl font-bold mb-2">
           <FadeText text={localLanguage === "en" ? recipe.titleEn : recipe.titleHi} />
         </h2>
-        <p className="text-muted-foreground mb-2 dark:text-black">
+        <p className="text-muted-foreground mb-2 dark:text-gray-300">
           <FadeText
             text={localLanguage === "en" ? recipe.shortDescriptionEn : recipe.shortDescriptionHi}
           />
         </p>
-        <p className="text-sm text-muted-foreground mb-2 dark:text-black">
+        <p className="text-sm text-muted-foreground mb-2 dark:text-gray-300">
           <strong>
             <FadeText text={localLanguage === "en" ? "Calories:" : "कैलोरी:"} />
           </strong>{" "}
           <FadeText text={recipe.caloriesEstimate} />
         </p>
-        <p className="text-sm text-muted-foreground mb-4 dark:text-black">
+        <p className="text-sm text-muted-foreground mb-4 dark:text-gray-300">
           <strong>
             <FadeText
               text={
@@ -176,10 +191,10 @@ const RecipeModal = ({
         </p>
 
         <div className="mb-4">
-          <h4 className="font-semibold mb-2">
+          <h4 className="font-semibold mb-2 dark:text-white">
             <FadeText text={localLanguage === "en" ? "Ingredients:" : "सामग्री:"} />
           </h4>
-          <ul className="list-disc list-inside">
+          <ul className="list-disc list-inside dark:text-gray-300">
             {(localLanguage === "en" ? recipe.ingredientsEn : recipe.ingredientsHi).map(
               (ing, i) => (
                 <li key={i}>{ing}</li>
@@ -189,10 +204,10 @@ const RecipeModal = ({
         </div>
 
         <div>
-          <h4 className="font-semibold mb-2">
+          <h4 className="font-semibold mb-2 dark:text-white">
             <FadeText text={localLanguage === "en" ? "Instructions:" : "निर्देश:"} />
           </h4>
-          <ol className="list-decimal list-inside space-y-1">
+          <ol className="list-decimal list-inside space-y-1 dark:text-gray-300">
             {(localLanguage === "en"
               ? recipe.instructionsEn
               : recipe.instructionsHi
@@ -203,10 +218,18 @@ const RecipeModal = ({
         </div>
 
         <div className="flex justify-end mt-4 gap-2">
-          <Button variant="outline" onClick={toggleLocalLanguage}>
+          <Button
+            variant="outline"
+            onClick={toggleLocalLanguage}
+            className="dark:border-gray-600 dark:text-white"
+          >
             <Languages className="h-5 w-5" />
           </Button>
-          <Button variant="outline" onClick={onClose}>
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="dark:border-gray-600 dark:text-white"
+          >
             {localLanguage === "en" ? "Close" : "बंद करें"}
           </Button>
         </div>
@@ -215,6 +238,9 @@ const RecipeModal = ({
   );
 };
 
+//
+// Main RecipeGenerator component
+//
 export default function RecipeGenerator() {
   // Global form state for UI controls & ThoughtProcessBox
   const [formLanguage, setFormLanguage] = useState<"en" | "hi">("en");
@@ -242,6 +268,9 @@ export default function RecipeGenerator() {
   // Cuisine dropdown
   const [cuisine, setCuisine] = useState("");
 
+  // New: Veg/NonVeg
+  const [dietType, setDietType] = useState<"veg" | "non-veg" | "both">("veg");
+
   // Additional Notes
   const [notes, setNotes] = useState("");
 
@@ -260,7 +289,7 @@ export default function RecipeGenerator() {
   // Check if any ingredient is provided
   const hasIngredients = ingredients.some((ing) => ing.trim() !== "");
 
-  // Handle "Add Ingredient"
+  // Add Ingredient
   const handleAddIngredient = () => {
     setIngredients((prev) => [...prev, ""]);
     setTimeout(() => {
@@ -284,6 +313,13 @@ export default function RecipeGenerator() {
   // Generate recipes (calls the external function)
   const handleGenerate = async () => {
     setIsGenerating(true);
+
+    // If user clicked "Surprise Me" (meaning no ingredients),
+    // by default we set dietType to "veg":
+    if (!hasIngredients) {
+      setDietType("veg");
+    }
+
     try {
       const { recipes: newRecipes, reasoningEn, reasoningHi } = await generateRecipes({
         ingredients: ingredients.filter((i) => i.trim() !== ""),
@@ -294,8 +330,11 @@ export default function RecipeGenerator() {
         cookingTime,
         cuisine,
         notes,
+        // Pass dietType or store it in the above object as needed:
+        dietType,
       });
-      // Prepend new recipes
+
+      // Prepend newly generated recipes
       setRecipes((prev) => [...newRecipes, ...prev]);
 
       // Update thought process messages (based on formLanguage)
@@ -315,7 +354,7 @@ export default function RecipeGenerator() {
   };
   const closeRecipeModal = () => setSelectedRecipe(null);
 
-  // Global form language toggle (for form controls and ThoughtProcessBox)
+  // Global form language toggle
   const toggleFormLanguage = () => {
     setFormLanguage((prev) => (prev === "en" ? "hi" : "en"));
   };
@@ -344,7 +383,7 @@ export default function RecipeGenerator() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <Card className="w-full mb-8 hover:shadow-xl transition-shadow duration-300">
+          <Card className="w-full mb-8 hover:shadow-lg transition-shadow duration-300">
             <CardHeader className="bg-primary text-primary-foreground">
               <CardTitle className="text-2xl font-bold flex items-center">
                 <ChefHat className="w-6 h-6 mr-2" />
@@ -392,7 +431,9 @@ export default function RecipeGenerator() {
                               ref={(el) => (inputRefs.current[index] = el)}
                               value={ingredient}
                               onChange={(e) => handleIngredientChange(index, e.target.value)}
-                              placeholder={formLanguage === "en" ? "Ingredient" : "सामग्री"}
+                              placeholder={
+                                formLanguage === "en" ? "Ingredient" : "सामग्री"
+                              }
                               className="pr-8 min-w-[120px]"
                               disabled={isGenerating}
                             />
@@ -487,7 +528,9 @@ export default function RecipeGenerator() {
                   {/* Number of People */}
                   <div className="flex items-center gap-3">
                     <Label htmlFor="people" className="text-lg font-semibold">
-                      <FadeText text={formLanguage === "en" ? "Number of People" : "लोगों की संख्या"} />
+                      <FadeText
+                        text={formLanguage === "en" ? "Number of People" : "लोगों की संख्या"}
+                      />
                     </Label>
                     <input
                       id="people"
@@ -514,7 +557,9 @@ export default function RecipeGenerator() {
                   {/* Cooking Time */}
                   <div className="flex items-center gap-3">
                     <Label htmlFor="cookTime" className="text-lg font-semibold">
-                      <FadeText text={formLanguage === "en" ? "Cooking Time (mins)" : "पकाने का समय (मिनट)"} />
+                      <FadeText
+                        text={formLanguage === "en" ? "Cooking Time (mins)" : "पकाने का समय (मिनट)"}
+                      />
                     </Label>
                     <input
                       id="cookTime"
@@ -530,8 +575,9 @@ export default function RecipeGenerator() {
                 </div>
               </div>
 
-              {/* Cuisine + Additional Notes */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Cuisine + Veg/NonVeg + Additional Notes */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Cuisine */}
                 <div>
                   <CuisineDropdown
                     label={formLanguage === "en" ? "Cuisine" : "पकवान शैली"}
@@ -539,9 +585,38 @@ export default function RecipeGenerator() {
                     onChange={(val) => setCuisine(val)}
                   />
                 </div>
-                <div className="border border-[hsl(0 0% 89.8%)] rounded-md p-4 bg-transparent">
+
+                {/* Veg/Non-Veg Dropdown */}
+                {/* <div>
                   <Label className="block text-lg font-semibold mb-1">
-                    <FadeText text={formLanguage === "en" ? "Additional Notes" : "अतिरिक्त नोट्स"} />
+                    <FadeText text={formLanguage === "en" ? "Veg / Non Veg" : "शाकाहारी / मांसाहारी"} />
+                  </Label>
+                  <select
+                    disabled={isGenerating}
+                    value={dietType}
+                    onChange={(e) => setDietType(e.target.value as "veg" | "non-veg" | "both")}
+                    className="block w-full border border-[hsl(0_0%_89.8%)] rounded-md p-2 bg-background text-foreground focus:outline-none focus:ring-1 ring-blue-500"
+                  >
+                    <option value="veg">{formLanguage === "en" ? "Veg" : "शाकाहारी"}</option>
+                    <option value="non-veg">{formLanguage === "en" ? "Non Veg" : "मांसाहारी"}</option>
+                    <option value="both">{formLanguage === "en" ? "Both" : "कोई भी"}</option>
+                  </select>
+                </div> */}
+
+                <DietDropdown
+                  label="Veg / Non Veg"
+                  selectedDiet={dietType}
+                  onChange={(val) => setDietType(val as "veg" | "non-veg" | "both")}
+                  disabled={isGenerating}
+                />
+
+
+                {/* Additional Notes */}
+                <div className="border border-[hsl(0_0%_89.8%)] rounded-md p-4 bg-transparent">
+                  <Label className="block text-lg font-semibold mb-1">
+                    <FadeText
+                      text={formLanguage === "en" ? "Additional Notes" : "अतिरिक्त नोट्स"}
+                    />
                   </Label>
                   <textarea
                     disabled={isGenerating}
@@ -553,10 +628,11 @@ export default function RecipeGenerator() {
                         ? "Any extra details or instructions..."
                         : "अतिरिक्त विवरण या निर्देश..."
                     }
-                    className="w-full h-24 bg-transparent border border-[hsl(0 0% 89.8%)] text-black dark:text-white rounded-md p-2 resize-none focus:outline-none focus:ring-1 ring-blue-500"
+                    className="w-full h-24 bg-transparent border border-[hsl(0_0%_89.8%)] text-black dark:text-white rounded-md p-2 resize-none focus:outline-none focus:ring-1 ring-blue-500"
                   />
                   <span className="font-thin text-[13px] float-end">
-                    {notes.length} / 123 {formLanguage === "en" ? "characters" : "अक्षर"}
+                    {notes.length} / 123{" "}
+                    {formLanguage === "en" ? "characters" : "अक्षर"}
                   </span>
                 </div>
               </div>
@@ -590,18 +666,18 @@ export default function RecipeGenerator() {
                                 ? "Regenerate Recipe"
                                 : "पुनः रेसिपी बनाएं"
                               : formLanguage === "en"
-                              ? "Generate Recipe"
-                              : "रेसिपी जनरेट करें"
+                                ? "Generate Recipe"
+                                : "रेसिपी जनरेट करें"
                             : formLanguage === "en"
-                            ? "Surprise Me"
-                            : "मुझे हैरान करें"
+                              ? "Surprise Me"
+                              : "मुझे हैरान करें"
                         }
                       />
                     </>
                   )}
                 </Button>
 
-                {/* Global language toggle for form controls */}
+                {/* Global language toggle */}
                 <Button variant="outline" onClick={toggleFormLanguage}>
                   <Languages className="h-5 w-5" />
                 </Button>
@@ -621,7 +697,12 @@ export default function RecipeGenerator() {
                 <FadeText text={formLanguage === "en" ? "Generated Recipes" : "उत्पन्न हुई रेसिपी"} />
                 <div className="space-y-4 mt-4">
                   {recipes.map((recipe, index) => (
-                    <RecipeCard key={index} recipe={recipe} index={index} onOpenModal={openRecipeModal} />
+                    <RecipeCard
+                      key={index}
+                      recipe={recipe}
+                      index={index}
+                      onOpenModal={openRecipeModal}
+                    />
                   ))}
                 </div>
               </motion.div>
