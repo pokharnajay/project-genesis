@@ -54,7 +54,7 @@ export function Footer() {
           </motion.div>
         </div>
         <div className="mt-12 text-center text-sm text-muted-foreground">
-          <p>© 2023 AI Solutions. All rights reserved.</p>
+          <p>© 2023 Genesis. All rights reserved.</p>
         </div>
       </div>
     </footer>

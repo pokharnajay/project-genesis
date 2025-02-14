@@ -45,7 +45,7 @@ const projects = [
   {
     title: "Recipe Generator",
     icon: ChefHat,
-    href: "/recipe-generator",
+    href: "/chefai",
     color: "text-blue-500 dark:text-blue-400",
     description: "Create personalized recipes based on your ingredients and preferences.",
   },
