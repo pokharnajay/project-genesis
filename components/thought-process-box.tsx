@@ -1,103 +1,97 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
-import { Minimize2, Maximize2 } from "lucide-react";
-import ReactMarkdown from "react-markdown";
-import { Typewriter } from 'react-simple-typewriter';
+import { X } from "lucide-react";
+import { Typewriter } from "react-simple-typewriter";
 
 interface ThoughtProcessBoxProps {
   /** An array of strings to display as the AI's reasoning or chain-of-thought. */
   reasoningMessages: string[];
-
-  /** Controls whether the box is minimized. */
-  isMinimized: boolean;
-  /** Function to toggle the minimization state. */
-  setIsMinimized: (value: boolean) => void;
 }
 
+/**
+ * Simple slide-in/out animation from the right.
+ */
+const containerVariants = {
+  open: { x: 0 },
+  closed: { x: "100%" },
+};
 
+export function ThoughtProcessBox({ reasoningMessages }: ThoughtProcessBoxProps) {
+  // isOpen = whether the main box is currently visible.
+  const [isOpen, setIsOpen] = useState(false);
 
-export function ThoughtProcessBox({
-  reasoningMessages,
-  isMinimized,
-  setIsMinimized,
-}: ThoughtProcessBoxProps) {
-  // 1) Use a ref for auto-scrolling
+  // For auto-scrolling
   const thoughtsRef = useRef<HTMLUListElement>(null);
 
-  // 2) Whenever reasoningMessages changes, scroll to bottom
   useEffect(() => {
     if (!thoughtsRef.current) return;
     thoughtsRef.current.scrollTop = thoughtsRef.current.scrollHeight;
-  }, [reasoningMessages]);
+  }, [reasoningMessages, isOpen]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="fixed top-24 right-4 w-80 z-50"
-    >
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">AI Thought Process</CardTitle>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsMinimized(!isMinimized)}
-          >
-            {isMinimized ? (
-              <Maximize2 className="h-4 w-4" />
-            ) : (
-              <Minimize2 className="h-4 w-4" />
-            )}
-          </Button>
-        </CardHeader>
-        <AnimatePresence initial={false}>
-          {!isMinimized && (
-            <motion.div
-              key="content"
-              initial="collapsed"
-              animate="open"
-              exit="collapsed"
-              variants={{
-                open: { opacity: 1, height: "auto" },
-                collapsed: { opacity: 0, height: 0 },
-              }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
+    <>
+      {/* 
+        1) The small "tab" pinned to the right edge. 
+           Only show it if the box is not open.
+      */}
+      {!isOpen && (
+        <motion.button
+          className="fixed top-24 right-0 z-50 bg-primary text-primary-foreground
+                     px-2 py-1 rounded-l-md shadow hover:bg-primary/90"
+          onClick={() => setIsOpen(true)}
+          whileHover={{ scale: 1.05 }}
+        >
+          AI Thoughts
+        </motion.button>
+      )}
+
+      {/* 
+        2) The main box (a card) that slides in/out from the right. 
+           It's pinned at top-24, right-0, with a fixed width (w-80).
+      */}
+      <motion.div
+        className="fixed top-24 right-0 z-50 w-80"
+        animate={isOpen ? "open" : "closed"}
+        variants={containerVariants}
+        transition={{ type: "spring", damping: 20, stiffness: 300 }}
+      >
+        <Card className="shadow-lg">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">AI Thought Process</CardTitle>
+            {/* Close button to slide box back out */}
+            <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
+              <X className="h-4 w-4" />
+            </Button>
+          </CardHeader>
+
+          <CardContent className="hide-scrollbar">
+            <ul
+              ref={thoughtsRef}
+              className="max-h-64 overflow-auto hide-scrollbar space-y-2"
             >
-              <CardContent className="hide-scrollbar">
-                {/* .hide-scrollbar hides the scrollbar; max-h-64 sets the height limit. */}
-                <ul
-                  ref={thoughtsRef}
-                  className="max-h-64 overflow-auto hide-scrollbar space-y-2"
+              {reasoningMessages.map((msg, idx) => (
+                <motion.li
+                  key={idx}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: idx * 0.05 }}
+                  className="text-xs text-muted-foreground border-b pb-1 mb-1"
                 >
-                  {reasoningMessages.map((msg, idx) => (
-                    <motion.li
-                      key={idx}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: idx * 0.05 }}
-                      className="text-xs text-muted-foreground border-b pb-1 mb-1"
-                    >
-                      {/* {msg} */}
-                      {/* <ReactMarkdown>{msg}</ReactMarkdown> */}
-                      <Typewriter
-                        words={[msg]}
-                        typeSpeed={5}
-                        cursor = {false}
-                      />
-                    </motion.li>
-                  ))}
-                </ul>
-              </CardContent>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </Card>
-    </motion.div>
+                  <Typewriter
+                    words={[msg]}
+                    typeSpeed={5}
+                    cursor={false}
+                  />
+                </motion.li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </>
   );
 }
