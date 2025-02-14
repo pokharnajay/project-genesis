@@ -52,7 +52,7 @@ ${inputText}
 
 Knowledge Base (if any):
 ${fileContext}
-
+ 
 Detail Level: ${detailLevel}%
 Include Examples: ${useExamples ? "Yes" : "No"}
 Language: ${language}

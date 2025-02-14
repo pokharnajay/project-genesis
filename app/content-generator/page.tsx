@@ -24,6 +24,18 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { ThoughtProcessBox } from "@/components/thought-process-box";
+import { generateContent } from "@/utils/generateContent";
+
+const FadeText = ({ text }: { text: string }) => (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.5, ease: "easeInOut" }}
+  >
+    {text}
+  </motion.div>
+);
 
 export default function ContentGenerator() {
   // Form fields
@@ -36,7 +48,7 @@ export default function ContentGenerator() {
   const [targetAudience, setTargetAudience] = useState("general");
   const [loading, setLoading] = useState(false);
 
-  // Final AI output
+  // Final AI output state (English only)
   const [output, setOutput] = useState("");
 
   // ThoughtProcessBox states
@@ -49,7 +61,7 @@ export default function ContentGenerator() {
     setLoading(true);
 
     try {
-      console.log("[CONTENT-GENERATOR] Sending request to /api/content-generator:", {
+      console.log("[CONTENT-GENERATOR] Generating content with parameters:", {
         inputBrief: input,
         tone,
         genre,
@@ -59,34 +71,23 @@ export default function ContentGenerator() {
         targetAudience,
       });
 
-      const res = await fetch("/api/content-generator", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          inputBrief: input,
-          tone,
-          genre,
-          contentLength,
-          includeKeywords,
-          keywords,
-          targetAudience,
-        }),
+      // Call the external function to generate content
+      const { output: generatedOutput, reasoning } = await generateContent({
+        inputBrief: input,
+        tone,
+        genre,
+        contentLength,
+        includeKeywords,
+        keywords,
+        targetAudience,
       });
 
-      const data = await res.json();
-      console.log("[CONTENT-GENERATOR] Response from server:", data);
-
-      if (data.error) {
-        setOutput(`Error: ${data.error}`);
-      } else {
-        // If the server returns chain-of-thought
-        if (data.reasoning) {
-          setReasoningMessages((prev) => [...prev, data.reasoning]);
-          setIsMinimized(false); // auto-open
-        }
-
-        setOutput(`Generated Content:\n\n${data.output || ""}`);
+      if (reasoning) {
+        setReasoningMessages((prev) => [...prev, reasoning]);
+        setIsMinimized(false); // Auto-open ThoughtProcessBox if new reasoning is provided
       }
+
+      setOutput(`Generated Content:\n\n${generatedOutput || ""}`);
     } catch (err: any) {
       console.error("[CONTENT-GENERATOR] Client error:", err);
       setOutput(`Error: ${String(err)}`);
@@ -111,7 +112,7 @@ export default function ContentGenerator() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          AI Content Generator
+          <FadeText text="AI Content Generator" />
         </motion.h1>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -147,7 +148,6 @@ export default function ContentGenerator() {
                       </SelectContent>
                     </Select>
                   </div>
-
                   {/* Genre */}
                   <div className="space-y-2">
                     <Label htmlFor="genre">Genre</Label>
@@ -163,14 +163,10 @@ export default function ContentGenerator() {
                       </SelectContent>
                     </Select>
                   </div>
-
                   {/* Target Audience */}
                   <div className="space-y-2">
                     <Label htmlFor="target-audience">Target Audience</Label>
-                    <Select
-                      value={targetAudience}
-                      onValueChange={setTargetAudience}
-                    >
+                    <Select value={targetAudience} onValueChange={setTargetAudience}>
                       <SelectTrigger id="target-audience">
                         <SelectValue placeholder="Select target audience" />
                       </SelectTrigger>
@@ -182,25 +178,31 @@ export default function ContentGenerator() {
                       </SelectContent>
                     </Select>
                   </div>
-
                   {/* Content Length */}
-                  <div className="space-y-2">
+                  <div className="flex flex-col items-start gap-2">
                     <Label htmlFor="content-length">
                       Content Length: {contentLength} words
                     </Label>
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                      <Slider
-                        id="content-length"
-                        min={100}
-                        max={2000}
-                        step={100}
-                        value={[contentLength]}
-                        onValueChange={(value) => setContentLength(value[0])}
+                    <div className="flex items-center gap-2">
+                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                        <Slider
+                          id="content-length"
+                          min={100}
+                          max={2000}
+                          step={100}
+                          value={[contentLength]}
+                          onValueChange={(value) => setContentLength(value[0])}
+                        />
+                      </motion.div>
+                      <input
+                        type="number"
+                        value={contentLength}
+                        onChange={(e) => setContentLength(Number(e.target.value))}
+                        className="w-20 border rounded-md px-2 py-1"
                       />
-                    </motion.div>
+                    </div>
                   </div>
                 </div>
-
                 {/* Include Keywords */}
                 <div className="flex items-center space-x-2">
                   <Switch
@@ -228,7 +230,6 @@ export default function ContentGenerator() {
                     </div>
                   </motion.div>
                 )}
-
                 {/* Content Brief */}
                 <div className="space-y-2">
                   <Label htmlFor="content-brief">Content Brief</Label>
@@ -241,7 +242,6 @@ export default function ContentGenerator() {
                     required
                   />
                 </div>
-
                 <Button
                   type="submit"
                   className="w-full bg-primary text-primary-foreground hover:bg-primary/90 hover-scale"

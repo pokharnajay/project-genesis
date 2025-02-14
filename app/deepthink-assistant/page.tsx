@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ReactMarkdown from "react-markdown";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -26,17 +26,33 @@ import { Slider } from "@/components/ui/slider";
 import { Upload, X, Brain } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThoughtProcessBox } from "@/components/thought-process-box";
+import { generateDeepThink } from "@/utils/generateDeepThink";
 
+// Dynamically import ReactMarkdown with SSR disabled.
+const ReactMarkdownNoSSR = dynamic(() => import("react-markdown"), {
+  ssr: false,
+});
+
+// Helper function to read a file as text.
 function readFileAsText(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = (e) => {
-      resolve(e.target?.result as string);
-    };
+    reader.onload = (e) => resolve(e.target?.result as string);
     reader.onerror = (err) => reject(err);
     reader.readAsText(file);
   });
 }
+
+const FadeText = ({ text }: { text: string }) => (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.5, ease: "easeInOut" }}
+  >
+    {text}
+  </motion.div>
+);
 
 export default function DeepThinkAssistant() {
   // Main user input
@@ -60,15 +76,16 @@ export default function DeepThinkAssistant() {
     e.preventDefault();
     setLoading(true);
     setOutput("");
+
     try {
-      // Convert file list to array of { name, content }
+      // Convert file list to an array of { name, content }
       const fileData = [];
       for (const f of files) {
         const content = await readFileAsText(f);
         fileData.push({ name: f.name, content });
       }
 
-      console.log("[DEEPTHINK] Sending to /api/deepthink-assistant:", {
+      console.log("[DEEPTHINK] Generating deep think with parameters:", {
         task,
         inputText: input,
         files: fileData.map((f) => f.name),
@@ -77,33 +94,21 @@ export default function DeepThinkAssistant() {
         language,
       });
 
-      const res = await fetch("/api/deepthink-assistant", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          task,
-          inputText: input,
-          files: fileData,
-          detailLevel,
-          useExamples,
-          language,
-          outoutLength: 1000,
-        }),
+      const { output: generatedOutput, reasoning } = await generateDeepThink({
+        task,
+        inputText: input,
+        files: fileData,
+        detailLevel,
+        useExamples,
+        language,
       });
-      const data = await res.json();
-      console.log("[DEEPTHINK] Response from server:", data);
 
-      if (data.error) {
-        setOutput(`Error: ${data.error}`);
-      } else {
-        // If server includes data.reasoning, show it in the side box
-        if (data.reasoning) {
-          setReasoningMessages((prev) => [...prev, data.reasoning]);
-          setIsMinimized(false);
-        }
-
-        setOutput(`DeepThink Results:\n\n${data.output || ""}`);
+      if (reasoning) {
+        setReasoningMessages((prev) => [...prev, reasoning]);
+        setIsMinimized(false);
       }
+
+      setOutput(`${generatedOutput || ""}`);
     } catch (err: any) {
       console.error("[DEEPTHINK] Client error:", err);
       setOutput(`Error: ${String(err)}`);
@@ -120,12 +125,12 @@ export default function DeepThinkAssistant() {
   };
 
   const removeFile = (index: number) => {
-    setFiles((f) => f.filter((_, i) => i !== index));
+    setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   return (
     <div className="container mx-auto p-4">
-      {/* ThoughtProcessBox with reasoning */}
+      {/* ThoughtProcessBox */}
       <ThoughtProcessBox
         reasoningMessages={reasoningMessages}
         isMinimized={isMinimized}
@@ -139,7 +144,7 @@ export default function DeepThinkAssistant() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          DeepThink Assistant
+          <FadeText text="DeepThink Assistant" />
         </motion.h1>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -181,10 +186,7 @@ export default function DeepThinkAssistant() {
 
                 {/* File Upload */}
                 <div>
-                  <Label
-                    htmlFor="file-upload"
-                    className="block text-sm font-medium mb-2"
-                  >
+                  <Label htmlFor="file-upload" className="block text-sm font-medium mb-2">
                     Attach Knowledge Base (optional)
                   </Label>
                   <div className="flex items-center space-x-2">
@@ -198,9 +200,7 @@ export default function DeepThinkAssistant() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() =>
-                        document.getElementById("file-upload")?.click()
-                      }
+                      onClick={() => document.getElementById("file-upload")?.click()}
                     >
                       <Upload className="w-4 h-4 mr-2" />
                       Choose Files
@@ -246,7 +246,7 @@ export default function DeepThinkAssistant() {
                   )}
                 </AnimatePresence>
 
-                {/* Detail level */}
+                {/* Detail Level */}
                 <div className="space-y-2">
                   <Label htmlFor="detail-level" className="text-sm font-medium">
                     Detail Level: {detailLevel}%
@@ -297,12 +297,10 @@ export default function DeepThinkAssistant() {
             </CardContent>
             <CardFooter>
               <div className="w-full">
-                <h3 className="text-lg font-semibold mb-2">
-                  DeepThink Output:
-                </h3>
-                <ReactMarkdown className="prose prose-sm sm:prose lg:prose-lg min-h-[200px] whitespace-pre-wrap border border-gray-200 overflow-y-auto p-2">
+                <h3 className="text-lg font-semibold mb-2">DeepThink Output:</h3>
+                <ReactMarkdownNoSSR className="prose prose-sm sm:prose lg:prose-lg min-h-[200px] whitespace-pre-wrap border border-gray-200 overflow-y-auto p-2">
                   {output}
-                </ReactMarkdown>
+                </ReactMarkdownNoSSR>
               </div>
             </CardFooter>
           </Card>

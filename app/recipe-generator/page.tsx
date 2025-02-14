@@ -70,7 +70,7 @@ const RecipeCard = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
-      <Card className="w-full overflow-hidden hover:shadow-lg transition-shadow duration-300">
+      <Card className="w-full overflow-hidden hover:shadow-xl transition-shadow duration-300">
         <CardHeader>
           <CardTitle className="text-xl font-semibold">
             <FadeText text={localLanguage === "en" ? recipe.titleEn : recipe.titleHi} />
@@ -90,7 +90,13 @@ const RecipeCard = ({
           </p>
           <p className="text-sm text-muted-foreground mb-2">
             <strong>
-              <FadeText text={localLanguage === "en" ? "Health/Taste Ratio:" : "स्वास्थ्य/स्वाद अनुपात:"} />
+              <FadeText
+                text={
+                  localLanguage === "en"
+                    ? "Health/Taste Ratio:"
+                    : "स्वास्थ्य/स्वाद अनुपात:"
+                }
+              />
             </strong>{" "}
             <FadeText text={recipe.healthTasteRatio} />
           </p>
@@ -98,7 +104,7 @@ const RecipeCard = ({
             <Button variant="outline" onClick={() => onOpenModal(recipe, index)}>
               <FadeText text={localLanguage === "en" ? "View Full Recipe" : "पूरी रेसिपी देखें"} />
             </Button>
-            <Button variant="ghost" onClick={toggleLocalLanguage}>
+            <Button variant="outline" onClick={toggleLocalLanguage}>
               <Languages className="h-5 w-5" />
             </Button>
           </div>
@@ -108,7 +114,7 @@ const RecipeCard = ({
   );
 };
 
-// RecipeModal component with its own local language toggle
+// Updated RecipeModal component (mobile-friendly) with second Close button
 const RecipeModal = ({
   recipe,
   onClose,
@@ -126,17 +132,18 @@ const RecipeModal = ({
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 dark:text-black"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 dark:text-black p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       <motion.div
-        className="bg-white w-full max-w-2xl p-6 rounded shadow-lg relative"
+        className="bg-white w-full max-w-2xl p-6 rounded shadow-xl relative overflow-y-auto max-h-[85vh]"
         initial={{ scale: 0.8 }}
         animate={{ scale: 1 }}
         exit={{ scale: 0.8 }}
       >
+        {/* Top-right close icon */}
         <Button variant="ghost" size="icon" className="absolute top-2 right-2" onClick={onClose}>
           <X className="h-5 w-5" />
         </Button>
@@ -157,10 +164,17 @@ const RecipeModal = ({
         </p>
         <p className="text-sm text-muted-foreground mb-4 dark:text-black">
           <strong>
-            <FadeText text={localLanguage === "en" ? "Health/Taste Ratio:" : "स्वास्थ्य/स्वाद अनुपात:"} />
+            <FadeText
+              text={
+                localLanguage === "en"
+                  ? "Health/Taste Ratio:"
+                  : "स्वास्थ्य/स्वाद अनुपात:"
+              }
+            />
           </strong>{" "}
           <FadeText text={recipe.healthTasteRatio} />
         </p>
+
         <div className="mb-4">
           <h4 className="font-semibold mb-2">
             <FadeText text={localLanguage === "en" ? "Ingredients:" : "सामग्री:"} />
@@ -173,21 +187,27 @@ const RecipeModal = ({
             )}
           </ul>
         </div>
+
         <div>
           <h4 className="font-semibold mb-2">
             <FadeText text={localLanguage === "en" ? "Instructions:" : "निर्देश:"} />
           </h4>
           <ol className="list-decimal list-inside space-y-1">
-            {(localLanguage === "en" ? recipe.instructionsEn : recipe.instructionsHi).map(
-              (step, i) => (
-                <li key={i}>{step}</li>
-              )
-            )}
+            {(localLanguage === "en"
+              ? recipe.instructionsEn
+              : recipe.instructionsHi
+            ).map((step, i) => (
+              <li key={i}>{step}</li>
+            ))}
           </ol>
         </div>
-        <div className="flex justify-end mt-4">
+
+        <div className="flex justify-end mt-4 gap-2">
           <Button variant="outline" onClick={toggleLocalLanguage}>
             <Languages className="h-5 w-5" />
+          </Button>
+          <Button variant="outline" onClick={onClose}>
+            {localLanguage === "en" ? "Close" : "बंद करें"}
           </Button>
         </div>
       </motion.div>
@@ -324,12 +344,16 @@ export default function RecipeGenerator() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <Card className="w-full mb-8 hover:shadow-lg transition-shadow duration-300">
+          <Card className="w-full mb-8 hover:shadow-xl transition-shadow duration-300">
             <CardHeader className="bg-primary text-primary-foreground">
               <CardTitle className="text-2xl font-bold flex items-center">
                 <ChefHat className="w-6 h-6 mr-2" />
                 <FadeText
-                  text={formLanguage === "en" ? "Create Your Perfect Recipe" : "अपनी परफ़ेक्ट रेसिपी बनाएँ"}
+                  text={
+                    formLanguage === "en"
+                      ? "Create Your Perfect Recipe"
+                      : "अपनी परफ़ेक्ट रेसिपी बनाएँ"
+                  }
                 />
               </CardTitle>
               <CardDescription className="text-primary-foreground/70">
@@ -547,7 +571,13 @@ export default function RecipeGenerator() {
                   {isGenerating ? (
                     <>
                       <Utensils className="mr-2 h-4 w-4 animate-spin" />
-                      <FadeText text={formLanguage === "en" ? "Cooking up ideas..." : "विचार तैयार कर रहा हूँ..."} />
+                      <FadeText
+                        text={
+                          formLanguage === "en"
+                            ? "Cooking up ideas..."
+                            : "विचार तैयार कर रहा हूँ..."
+                        }
+                      />
                     </>
                   ) : (
                     <>
@@ -606,7 +636,7 @@ export default function RecipeGenerator() {
           <RecipeModal
             recipe={selectedRecipe}
             onClose={closeRecipeModal}
-            initialLanguage="en"
+            initialLanguage={modalLanguage}
           />
         )}
       </AnimatePresence>
