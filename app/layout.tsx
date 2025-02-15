@@ -57,41 +57,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        {/* Favicon & Apple Touch Icon */}
-        <link rel="icon" href="/favicon.png" type="image/x-icon" />
-        <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-
-        {/* Open Graph Meta Tags */}
-        <meta property="og:title" content="Genesis - AI Research Project" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.jaypokharna.xyz/" />
-        <meta
-          property="og:image"
-          content="https://www.jaypokharna.xyz/opengraph-image.png"
-        />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta
-          property="og:description"
-          content="An AI-driven research initiative exploring the future of technology."
-        />
-        <meta property="og:site_name" content="Genesis" />
-        <meta property="og:locale" content="en_US" />
-
-        {/* Twitter Meta Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Genesis - AI Research Project" />
-        <meta
-          name="twitter:description"
-          content="An AI-driven research initiative exploring the future of technology."
-        />
-        <meta
-          name="twitter:image"
-          content="https://www.jaypokharna.xyz/twitter-image.png"
-        />
-      </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <ScrollToTop />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
