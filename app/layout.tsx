@@ -82,13 +82,13 @@ export default function RootLayout({
         <meta property="og:type" content="website" />
         <meta property="og:description" content="An AI-driven research initiative exploring the future of technology." />
         <meta property="og:image" content="https://www.jaypokharna.xyz/open-graph.png" />
-        <meta property="og:logo" content="https://www.jaypokharna.xyz/logo.png" />
+        <meta property="og:logo" content="https://www.jaypokharna.xyz/favicon.png" />
         <title>Genesis - AI Research Project</title>
         <meta name="description" content="" />
 
         <meta property="og:title" content="Genesis - AI Research Project" />
         <meta property="og:description" content="" />
-        <meta property="og:image" content="open-graph.png" />
+        <meta property="og:image" content="https://www.jaypokharna.xyz/open-graph.png" />
         <meta property="og:url" content="https://www.jaypokharna.xyz" />
         <meta property="og:site_name" content="Genesis" />
         <meta property="og:type" content="website" />
@@ -97,7 +97,7 @@ export default function RootLayout({
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Genesis - AI Research Project" />
         <meta name="twitter:description" content="" />
-        <meta name="twitter:image" content="open-graph.png" />
+        <meta name="twitter:image" content="https://www.jaypokharna.xyz/open-graph.png" />
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <ScrollToTop />
