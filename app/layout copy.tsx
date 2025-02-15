@@ -53,11 +53,6 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Genesis - AI Research Project",
   description: "An AI-driven research initiative exploring the future of technology.",
-  icons: {
-        icon: "/favicon.png",
-        apple: "/apple-touch-icon.png",
-        shortcut: "/favicon.png",
-      },
   openGraph: {
     title: "Genesis - AI Research Project",
     description: "Discover AI solutions, chatbot development, and automation. Streamline processes and boost productivity through innovative automation technologies",
@@ -70,7 +65,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
-  metadataBase: new URL("https://www.jaypokharna.xyz"),  // Add this line
+  metadataBase: new URL("https://etherwise.io"),  // Add this line
 };
 
 export default function RootLayout({
