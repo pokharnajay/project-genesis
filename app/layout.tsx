@@ -26,13 +26,13 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://www.jaypokharna.xyz/og",
+        url: "https://www.jaypokharna.xyz/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: "Genesis OG Image - Default",
       },
       {
-        url: "https://www.jaypokharna.xyz/og?variant=square",
+        url: "https://www.jaypokharna.xyz/og-square.png",
         width: 600,
         height: 600,
         alt: "Genesis OG Image - Square",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     title: "Genesis - AI Research Project",
     description: "An AI-driven research initiative exploring the future of technology.",
     images: [
-      "https://www.jaypokharna.xyz/og",
+      "https://www.jaypokharna.xyz/twitter-image.png",
     ],
   },
 };
@@ -68,7 +68,7 @@ export default function RootLayout({
         <meta property="og:url" content="https://www.jaypokharna.xyz/" />
         <meta
           property="og:image"
-          content="https://www.jaypokharna.xyz/og"
+          content="https://www.jaypokharna.xyz/opengraph-image.png"
         />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -88,7 +88,7 @@ export default function RootLayout({
         />
         <meta
           name="twitter:image"
-          content="https://www.jaypokharna.xyz/og"
+          content="https://www.jaypokharna.xyz/twitter-image.png"
         />
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
