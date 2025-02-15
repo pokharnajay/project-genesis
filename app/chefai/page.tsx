@@ -375,7 +375,7 @@ export default function RecipeGenerator() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <FadeText text={formLanguage === "en" ? "FlavorFusion" : "एआई रेसिपी जनरेटर"} />
+          <FadeText text={formLanguage === "en" ? "Sous-Chef" : "सहायक शेफ"} />
         </motion.h1>
 
         <motion.div
