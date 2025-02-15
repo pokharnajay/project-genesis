@@ -39,7 +39,7 @@ export const metadata: Metadata = {
       },
     ],
   },
-  metadataBase: new URL("https://www.jaypokharna.xyz"),  // Add this line
+  metadataBase: new URL("https://www.jaypokharna.xyz"),
   twitter: {
     card: "summary_large_image",
     title: "Genesis - AI Research Project",
@@ -77,6 +77,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta property="og:url" content="https://www.jaypokharna.xyz/" />
+        <meta property="og:type" content="website" />
+        <meta property="og:description" content="An AI-driven research initiative exploring the future of technology." />
+        <meta property="og:image" content="https://www.jaypokharna.xyz/open-graph.png" />
+        <meta property="og:logo" content="https://www.jaypokharna.xyz/logo.png" />
+      </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <ScrollToTop />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
