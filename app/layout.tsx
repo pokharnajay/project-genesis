@@ -26,16 +26,16 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/opengraph-image.jpg", // 1200x630 image (1.91:1 aspect ratio)
+        url: "https://www.jaypokharna.xyz/og",
         width: 1200,
         height: 630,
-        alt: "Genesis AI Research Preview",
+        alt: "Genesis OG Image - Default",
       },
       {
-        url: "/og-square.jpg", // Optional square image (600x600)
+        url: "https://www.jaypokharna.xyz/og?variant=square",
         width: 600,
         height: 600,
-        alt: "Genesis AI Research Square Preview",
+        alt: "Genesis OG Image - Square",
       },
     ],
   },
@@ -43,7 +43,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Genesis - AI Research Project",
     description: "An AI-driven research initiative exploring the future of technology.",
-    images: ["/twitter-image.jpg"],
+    images: [
+      "https://www.jaypokharna.xyz/og",
+    ],
   },
 };
 
@@ -64,18 +66,30 @@ export default function RootLayout({
         <meta property="og:title" content="Genesis - AI Research Project" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.jaypokharna.xyz/" />
-        <meta property="og:image" content="/opengraph-image.jpg" />
+        <meta
+          property="og:image"
+          content="https://www.jaypokharna.xyz/og"
+        />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:description" content="An AI-driven research initiative exploring the future of technology." />
+        <meta
+          property="og:description"
+          content="An AI-driven research initiative exploring the future of technology."
+        />
         <meta property="og:site_name" content="Genesis" />
         <meta property="og:locale" content="en_US" />
 
         {/* Twitter Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Genesis - AI Research Project" />
-        <meta name="twitter:description" content="An AI-driven research initiative exploring the future of technology." />
-        <meta name="twitter:image" content="/twitter-image.jpg" />
+        <meta
+          name="twitter:description"
+          content="An AI-driven research initiative exploring the future of technology."
+        />
+        <meta
+          name="twitter:image"
+          content="https://www.jaypokharna.xyz/og"
+        />
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <ScrollToTop />
