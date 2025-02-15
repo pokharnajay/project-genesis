@@ -74,9 +74,9 @@ Constraints:
 10) Provide a shortDescription (3-4 sentences) in both English and Hindi.
 11) Provide extremely detailed step-by-step instructions in both English and Hindi.
 12) Provide at least 2-3 recipes in the "recipes" array (sometimes you can give just 1 or 2).
-13) Include 1-3 lines of "thought process" in both English and Hindi (reasoningEn and reasoningHi).
+13) Include 1-3 lines of "thought process(like you are talking to a user)" in both English and Hindi (reasoningEn and reasoningHi).
 14) Output only JSON, no triple backticks or extra text.
-15) If no ingredients are provided, generate random, fun recipes with creative names and unexpected twists.
+15) If no ingredients are provided, it means user want you to surprise them,so generate random, fun recipes with creative names and unexpected twists.
 16) The user’s diet preference is: ${dietType}.
    - If "veg", ensure the recipe is strictly vegetarian (no meat, poultry, or fish).
    - If "non-veg", use at least one main non-vegetarian ingredient.
