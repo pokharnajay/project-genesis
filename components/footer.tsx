@@ -10,7 +10,7 @@ import { motion } from "framer-motion"
 export function Footer() {
   return (
     <footer className="border-t border-border bg-gradient-to-b from-background to-secondary/10">
-      <div className="container py-12 md:py-16 mx-auto justify-between">
+      <div className="container py-12 px-5 md:py-16 mx-auto justify-between">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
           >

@@ -80,7 +80,7 @@ Language: ${language}
       Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENROUTER_API_KEY ?? ""}`,
     },
     body: JSON.stringify({
-      model: "openai/gpt-4o-mini",
+      model: "google/gemini-2.0-flash-thinking-exp:free",
       messages: [
         { role: "system", content: systemMessage },
         { role: "user", content: userMessage },

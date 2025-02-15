@@ -63,7 +63,7 @@ Knowledge Base (if any):
 ${knowledgeBase}
 `;
 
-    console.log("[QA-CHATBOT] Calling OpenRouter with model=openai/gpt-4o-mini...");
+    console.log("[QA-CHATBOT] Calling OpenRouter with model=google/gemini-2.0-flash-thinking-exp:free...");
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -72,7 +72,7 @@ ${knowledgeBase}
       },
       body: JSON.stringify({
         // If you want deepseek, use "deepseek/deepseek-r1:free" instead
-        model: "openai/gpt-4o-mini",
+        model: "google/gemini-2.0-flash-thinking-exp:free",
         messages: [
           { role: "system", content: systemMessage },
           { role: "user", content: userMessage },

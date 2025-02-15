@@ -58,7 +58,7 @@ Include Examples: ${useExamples ? "Yes" : "No"}
 Language: ${language}
 `;
 
-    console.log("[DEEPTHINK-ASSISTANT] Calling OpenRouter with model=openai/gpt-4o-mini...");
+    console.log("[DEEPTHINK-ASSISTANT] Calling OpenRouter with model=google/gemini-2.0-flash-thinking-exp:free...");
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -66,7 +66,7 @@ Language: ${language}
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENROUTER_API_KEY ?? ""}`,
       },
       body: JSON.stringify({
-        model: "openai/gpt-4o-mini",
+        model: "google/gemini-2.0-flash-thinking-exp:free",
         messages: [
           { role: "system", content: systemMessage },
           { role: "user", content: userMessage },

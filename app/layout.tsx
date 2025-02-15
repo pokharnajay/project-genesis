@@ -103,7 +103,7 @@ export default function RootLayout({
         <ScrollToTop />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />
-          <main className="flex-grow pb-32 relative">{children}</main>
+          <main className="flex-grow pb-32 relative max-md:pb-6">{children}</main>
           <Footer />
         </ThemeProvider>
       </body>

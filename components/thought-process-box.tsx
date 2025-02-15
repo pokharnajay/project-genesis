@@ -40,7 +40,7 @@ export function ThoughtProcessBox({ reasoningMessages }: ThoughtProcessBoxProps)
       */}
       {!isOpen && (
         <motion.button
-          className="fixed top-24 right-0 z-50 bg-primary text-primary-foreground
+          className="fixed top-32 right-0 z-50 bg-primary text-primary-foreground
                      px-2 py-1 rounded-l-md shadow hover:bg-primary/90"
           onClick={() => setIsOpen(true)}
           whileHover={{ scale: 1.05 }}
