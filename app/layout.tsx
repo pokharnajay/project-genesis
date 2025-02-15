@@ -39,6 +39,7 @@ export const metadata: Metadata = {
       },
     ],
   },
+  metadataBase: new URL("https://www.jaypokharna.xy"),  // Add this line
   twitter: {
     card: "summary_large_image",
     title: "Genesis - AI Research Project",
